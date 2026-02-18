@@ -19,16 +19,6 @@ st.set_page_config(
 output_dir = "output"
 create_output_directory(output_dir)
 
-# Check for OpenAI API key
-if "OPENAI_API_KEY" not in os.environ:
-    st.warning("⚠️ OpenAI API key not found in environment variables. Please enter your API key below.")
-    api_key = st.text_input("OpenAI API Key", type="password", help="Your API key starts with 'sk-'")
-    if api_key:
-        os.environ["OPENAI_API_KEY"] = api_key
-        st.success("✅ API key set successfully! You can now generate content.")
-        time.sleep(1)
-        st.rerun()
-
 def display_header():
     st.title("📚 Young Adult Novel Generator")
     st.markdown("""
