@@ -20,7 +20,7 @@ output_dir = "output"
 create_output_directory(output_dir)
 
 def display_header():
-    st.title("📚 Young Adult Novel Generator")
+    st.title("📚 Young Adults Novel Generator")
     st.markdown("""
     Create compelling YA novels with AI assistance. This tool will help you generate:
     - Young adult story concepts with themes, characters, and conflict
