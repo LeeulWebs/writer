@@ -8,3 +8,6 @@ dependencies = [
     "openai>=1.76.0",
     "streamlit>=1.44.1",
 ]
+
+[project.scripts]
+app = "main:main"
