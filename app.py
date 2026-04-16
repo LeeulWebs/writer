@@ -202,42 +202,44 @@ def display_story_details(story_details=None):
     with st.expander("📝 Young Adult Novel Concept", expanded=not bool(story_details)):
         if story_details:
             try:
-                # Display in a more organized format
-                col1, col2 = st.columns(2)
-                
-                with col1:
-                    st.subheader("Core Concept")
-                    st.markdown(f"**Theme:** {story_details.get('story_theme', 'N/A')}")
-                    st.markdown(f"**Genre:** {story_details.get('genre', 'N/A')}")
-                    st.markdown(f"**Central Concept:** {story_details.get('central_concept', 'N/A')}")
-                    st.markdown(f"**Target Age Range:** {story_details.get('target_age_range', 'N/A')}")
-                    st.markdown(f"**Word Count:** {story_details.get('estimated_word_count', 'N/A')}")
-                    st.markdown(f"**Narrative Style:** {story_details.get('narrative_style', 'N/A')}")
-                
-                with col2:
-                    st.subheader("Characters & Setting")
-                    st.markdown(f"**Main Character:** {story_details.get('main_character_name', 'N/A')}")
-                    st.markdown(f"**Central Conflict:** {story_details.get('central_conflict', 'N/A')}")
-                    st.markdown(f"**Setting:** {story_details.get('setting', 'N/A')}")
-                    st.markdown(f"**Time Period:** {story_details.get('time_period', 'N/A')}")
-                
-                st.subheader("Supporting Characters")
+                view_tab, edit_tab = st.tabs(["View", "✏️ Edit"])
+
                 supporting_chars = story_details.get('supporting_characters', [])
-                if isinstance(supporting_chars, list):
-                    for char in supporting_chars:
-                        if isinstance(char, dict):
-                            st.markdown(f"- **{char.get('name', 'Character')}**: {char.get('description', '')}")
-                        else:
-                            st.markdown(f"- {char}")
-                else:
-                    st.markdown(supporting_chars)
-                
-                st.subheader("Plot Summary")
-                st.markdown(story_details.get('plot_summary', 'No plot summary available.'))
-                
-                # Download button for story details
-                # Prepare formatted text for download
-                story_details_text = f"""# Story Details for '{story_details.get('title', 'Novel')}'
+
+                with view_tab:
+                    col1, col2 = st.columns(2)
+                    
+                    with col1:
+                        st.subheader("Core Concept")
+                        st.markdown(f"**Theme:** {story_details.get('story_theme', 'N/A')}")
+                        st.markdown(f"**Genre:** {story_details.get('genre', 'N/A')}")
+                        st.markdown(f"**Central Concept:** {story_details.get('central_concept', 'N/A')}")
+                        st.markdown(f"**Target Age Range:** {story_details.get('target_age_range', 'N/A')}")
+                        st.markdown(f"**Word Count:** {story_details.get('estimated_word_count', 'N/A')}")
+                        st.markdown(f"**Narrative Style:** {story_details.get('narrative_style', 'N/A')}")
+                    
+                    with col2:
+                        st.subheader("Characters & Setting")
+                        st.markdown(f"**Main Character:** {story_details.get('main_character_name', 'N/A')}")
+                        st.markdown(f"**Central Conflict:** {story_details.get('central_conflict', 'N/A')}")
+                        st.markdown(f"**Setting:** {story_details.get('setting', 'N/A')}")
+                        st.markdown(f"**Time Period:** {story_details.get('time_period', 'N/A')}")
+                    
+                    st.subheader("Supporting Characters")
+                    if isinstance(supporting_chars, list):
+                        for char in supporting_chars:
+                            if isinstance(char, dict):
+                                st.markdown(f"- **{char.get('name', 'Character')}**: {char.get('description', '')}")
+                            else:
+                                st.markdown(f"- {char}")
+                    else:
+                        st.markdown(supporting_chars)
+                    
+                    st.subheader("Plot Summary")
+                    st.markdown(story_details.get('plot_summary', 'No plot summary available.'))
+
+                    # Download button
+                    story_details_text = f"""# Story Details for '{story_details.get('title', 'Novel')}'
 
 ## Core Concept
 Theme: {story_details.get('story_theme', 'N/A')}
@@ -255,61 +257,128 @@ Time Period: {story_details.get('time_period', 'N/A')}
 
 ## Supporting Characters
 """
-                # Add supporting characters
-                if isinstance(supporting_chars, list):
-                    for char in supporting_chars:
-                        if isinstance(char, dict):
-                            story_details_text += f"- {char.get('name', 'Character')}: {char.get('description', '')}\n"
-                        else:
-                            story_details_text += f"- {char}\n"
-                else:
-                    story_details_text += supporting_chars + "\n"
-                
-                story_details_text += f"\n## Plot Summary\n{story_details.get('plot_summary', 'No plot summary available.')}"
-                
-                st.download_button(
-                    label="Download Story Details",
-                    data=story_details_text,
-                    file_name=f"{story_details.get('title', 'novel')}_story_details.txt",
-                    mime="text/plain",
-                )
+                    if isinstance(supporting_chars, list):
+                        for char in supporting_chars:
+                            if isinstance(char, dict):
+                                story_details_text += f"- {char.get('name', 'Character')}: {char.get('description', '')}\n"
+                            else:
+                                story_details_text += f"- {char}\n"
+                    else:
+                        story_details_text += supporting_chars + "\n"
+                    story_details_text += f"\n## Plot Summary\n{story_details.get('plot_summary', 'No plot summary available.')}"
+                    
+                    st.download_button(
+                        label="Download Story Details",
+                        data=story_details_text,
+                        file_name=f"{story_details.get('title', 'novel')}_story_details.txt",
+                        mime="text/plain",
+                    )
 
-                # Display series context if available
-                if story_details.get('series_context'):
-                    series_context = story_details.get('series_context', {})
-                    # Use a container instead of nested expander
-                    st.subheader("📚 Series Context")
-                    st.markdown(f"**Book {series_context.get('book_number', '?')} of {series_context.get('total_books', '?')}**")
-                    
-                    st.markdown("**Series Arc**")
-                    st.markdown(series_context.get('series_arc', 'No series arc available.'))
-                    
-                    if series_context.get('character_arcs'):
-                        st.markdown("**Character Arcs Across Series**")
-                        for char_name, char_arc in series_context.get('character_arcs', {}).items():
-                            st.markdown(f"- **{char_name}**: {char_arc}")
-                    
-                    if series_context.get('themes'):
-                        st.markdown("**Series Themes**")
-                        for theme in series_context.get('themes', []):
-                            st.markdown(f"- {theme}")
-                    
-                    if series_context.get('continuity_notes'):
-                        st.markdown("**Continuity Notes**")
-                        st.markdown(series_context.get('continuity_notes', ''))
-                    
-                    if series_context.get('prior_books'):
-                        st.markdown("**Prior Books in Series**")
-                        for i, book in enumerate(series_context.get('prior_books', [])):
-                            st.markdown(f"**📕 {book.get('title', f'Prior Book {i+1}')}**")
-                            st.markdown(f"*Synopsis:* {book.get('synopsis', 'No synopsis available.')}")
-                
-                # Advanced: View raw JSON with a checkbox instead of expander
-                if st.checkbox("View Raw JSON Data", False):
-                    st.json(story_details)
-                    
-                if st.button("♻️ Regenerate Story Details", key="regenerate_story"):
-                    return True
+                    # Display series context if available
+                    if story_details.get('series_context'):
+                        series_context = story_details.get('series_context', {})
+                        st.subheader("📚 Series Context")
+                        st.markdown(f"**Book {series_context.get('book_number', '?')} of {series_context.get('total_books', '?')}**")
+                        st.markdown("**Series Arc**")
+                        st.markdown(series_context.get('series_arc', 'No series arc available.'))
+                        if series_context.get('character_arcs'):
+                            st.markdown("**Character Arcs Across Series**")
+                            for char_name, char_arc in series_context.get('character_arcs', {}).items():
+                                st.markdown(f"- **{char_name}**: {char_arc}")
+                        if series_context.get('themes'):
+                            st.markdown("**Series Themes**")
+                            for theme in series_context.get('themes', []):
+                                st.markdown(f"- {theme}")
+                        if series_context.get('continuity_notes'):
+                            st.markdown("**Continuity Notes**")
+                            st.markdown(series_context.get('continuity_notes', ''))
+                        if series_context.get('prior_books'):
+                            st.markdown("**Prior Books in Series**")
+                            for i, book in enumerate(series_context.get('prior_books', [])):
+                                st.markdown(f"**📕 {book.get('title', f'Prior Book {i+1}')}**")
+                                st.markdown(f"*Synopsis:* {book.get('synopsis', 'No synopsis available.')}")
+
+                    if st.checkbox("View Raw JSON Data", False):
+                        st.json(story_details)
+                        
+                    if st.button("♻️ Regenerate Story Details", key="regenerate_story"):
+                        return True
+
+                with edit_tab:
+                    st.subheader("Core Concept")
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        edit_theme = st.text_input("Theme", value=story_details.get('story_theme', ''), key="edit_story_theme")
+                        edit_genre = st.text_input("Genre", value=story_details.get('genre', ''), key="edit_genre")
+                        edit_concept = st.text_area("Central Concept", value=story_details.get('central_concept', ''), key="edit_central_concept", height=100)
+                    with col2:
+                        edit_age_range = st.text_input("Target Age Range", value=str(story_details.get('target_age_range', '')), key="edit_target_age_range")
+                        edit_word_count = st.text_input("Word Count", value=str(story_details.get('estimated_word_count', '')), key="edit_word_count")
+                        edit_narrative = st.text_input("Narrative Style", value=story_details.get('narrative_style', ''), key="edit_narrative_style")
+
+                    st.subheader("Characters & Setting")
+                    col3, col4 = st.columns(2)
+                    with col3:
+                        edit_main_char = st.text_input("Main Character", value=story_details.get('main_character_name', ''), key="edit_main_char")
+                        edit_conflict = st.text_area("Central Conflict", value=story_details.get('central_conflict', ''), key="edit_central_conflict", height=100)
+                    with col4:
+                        edit_setting = st.text_input("Setting", value=story_details.get('setting', ''), key="edit_setting")
+                        edit_time_period = st.text_input("Time Period", value=story_details.get('time_period', ''), key="edit_time_period")
+
+                    st.subheader("Supporting Characters")
+                    st.caption("Format: one character per line as **Name: Description**")
+                    if isinstance(supporting_chars, list):
+                        chars_text = "\n".join([
+                            f"{c.get('name', '')}: {c.get('description', '')}" if isinstance(c, dict) else str(c)
+                            for c in supporting_chars
+                        ])
+                    else:
+                        chars_text = str(supporting_chars)
+                    edit_supporting = st.text_area("Supporting Characters", value=chars_text, key="edit_supporting_chars", height=180)
+
+                    st.subheader("Plot Summary")
+                    edit_plot = st.text_area("Plot Summary", value=story_details.get('plot_summary', ''), key="edit_plot_summary", height=200)
+
+                    if st.button("💾 Save Changes", key="save_story_details"):
+                        # Parse supporting characters back into list of dicts
+                        new_chars = []
+                        for line in edit_supporting.strip().split("\n"):
+                            line = line.strip()
+                            if not line:
+                                continue
+                            if ": " in line:
+                                name, desc = line.split(": ", 1)
+                                new_chars.append({"name": name.strip(), "description": desc.strip()})
+                            else:
+                                new_chars.append({"name": line, "description": ""})
+
+                        story_details.update({
+                            'story_theme': edit_theme,
+                            'genre': edit_genre,
+                            'central_concept': edit_concept,
+                            'target_age_range': edit_age_range,
+                            'estimated_word_count': edit_word_count,
+                            'narrative_style': edit_narrative,
+                            'main_character_name': edit_main_char,
+                            'central_conflict': edit_conflict,
+                            'setting': edit_setting,
+                            'time_period': edit_time_period,
+                            'supporting_characters': new_chars,
+                            'plot_summary': edit_plot,
+                        })
+
+                        st.session_state.state["story_details"] = story_details
+
+                        if st.session_state.state.get("novel_id"):
+                            NovelDatabaseService.save_story_details(
+                                st.session_state.state.get("novel_id"),
+                                story_details
+                            )
+
+                        st.success("✅ Story details saved successfully!")
+                        time.sleep(1)
+                        st.rerun()
+
             except Exception as e:
                 st.error(f"Error displaying story details: {str(e)}")
                 st.json(story_details)
