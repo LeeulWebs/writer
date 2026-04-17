@@ -190,12 +190,20 @@ def display_settings():
                 step=50,
                 help="Minimum word count for each scene"
             )
+        
+        novel_description = st.text_area(
+            "Novel Description (optional)",
+            placeholder="Describe what your novel is about — the story idea, characters, setting, themes, or any specific details you want the AI to use when generating the story...",
+            help="Provide context to guide the AI when generating story details.",
+            height=120
+        )
     
     return {
         "title": title.strip(),
         "model": model,
         "max_scene_length": max_scene_length,
-        "min_scene_length": min_scene_length
+        "min_scene_length": min_scene_length,
+        "novel_description": novel_description.strip()
     }
 
 def display_story_details(story_details=None):
@@ -1065,7 +1073,8 @@ def main():
                     model=settings["model"],
                     max_scene_length=settings["max_scene_length"],
                     min_scene_length=settings["min_scene_length"],
-                    output_dir=output_dir
+                    output_dir=output_dir,
+                    description=settings.get("novel_description", "")
                 )
                 
                 if not st.session_state.state.get("novel_id"):

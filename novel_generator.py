@@ -7,7 +7,7 @@ from db_service import NovelDatabaseService
 from utils import sanitize_filename
 
 class NovelAutomationTool:
-    def __init__(self, title, model="gpt-4.1", max_scene_length=1000, min_scene_length=300, output_dir="output"):
+    def __init__(self, title, model="gpt-4.1", max_scene_length=1000, min_scene_length=300, output_dir="output", description=""):
         """
         Initialize the novel automation tool.
         
@@ -17,10 +17,10 @@ class NovelAutomationTool:
             max_scene_length (int): Maximum word count for scenes
             min_scene_length (int): Minimum word count for scenes
             output_dir (str): Directory to save output files
+            description (str): Optional description/context for the novel
         """
         self.title = title
-        # Updated to use gpt-4.1 as the default model per user request.
-        # This is the preferred model for novel generation.
+        self.description = description
         self.model = model
         self.max_scene_length = max_scene_length
         self.min_scene_length = min_scene_length
@@ -112,8 +112,10 @@ class NovelAutomationTool:
         Returns:
             dict: Story details including theme, genre, concept, word count, audience, etc.
         """
+        description_context = f"\n\n        Additional context provided by the author:\n        {self.description.strip()}\n\n        Use this context to guide your story details." if self.description and self.description.strip() else ""
+
         prompt = f"""
-        I am writing a Young Adult Novel titled "{self.title}".
+        I am writing a Young Adult Novel titled "{self.title}".{description_context}
 
         Give me the following details:
         1. story_theme: The central theme or message of the novel
