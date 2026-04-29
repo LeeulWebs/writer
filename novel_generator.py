@@ -2349,7 +2349,7 @@ class NovelAutomationTool:
             str: A detailed cover design prompt
         """
         prompt = f"""
-        Create a prompt for a front cover design for the novel "{self.title}" written by Elstran Books.
+        Create a prompt for a front cover design for the novel "{self.title}" written by Prosee Books.
 
         Guidelines:
         – The cover should visually represent the core theme(s) of the novel—think mood, symbolism, and emotional tone.
@@ -2364,14 +2364,14 @@ class NovelAutomationTool:
 
         Format the request like this:
 
-        Design a front cover for the novel "{self.title}" by Elstran Books.
+        Design a front cover for the novel "{self.title}" by Prosee Books.
         This novel is a {story_details.get('genre', 'Young Adult')} story with themes of {story_details.get('story_theme', 'transformation and growth')}.
         The tone is {story_details.get('mood', 'reflective')} and the setting features {story_details.get('setting', 'a contemporary high school')}.
         The cover should feature [Main visual concept that captures the story's essence].
         Use a [Color palette/style] to reflect the mood of the story.
         Optional: Include [Symbols, background elements, or objects that represent the deeper themes].
 
-        Make sure the title "{self.title}" and author name "Elstran Books" are clearly visible on the cover.
+        Make sure the title "{self.title}" and author name "Prosee Books" are clearly visible on the cover.
         """
         
         # Generate the cover design prompt using the story details
